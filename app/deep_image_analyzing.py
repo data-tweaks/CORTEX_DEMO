@@ -261,10 +261,10 @@ def main():
         if st.session_state.CompImg2_input  is not None and  st.session_state.Compimg1_input is not None:  
             leftImage.write(image1)
             leftImage.write(f" **:grey[Image 1 :]** {img1Name} ")
-            st.session_state.demo_session.file.put(f"/tmp/{img1Name}", "@IMAGE_REP", auto_compress=True)      
+            st.session_state.demo_session.file.put(f"/tmp/{img1Name}", "@IMAGE_REP", auto_compress=False)      
             rightImage.write(image2)
             rightImage.write(f" **:grey[Image 2 :]** {img2Name} ")
-            st.session_state.demo_session.file.put(f"/tmp/{img2Name}", "@IMAGE_REP", auto_compress=True)
+            st.session_state.demo_session.file.put(f"/tmp/{img2Name}", "@IMAGE_REP", auto_compress=False)
 
         # compare the images 
         if img2Name != "" and img1Name != "": 
