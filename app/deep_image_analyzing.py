@@ -225,23 +225,34 @@ def main():
         st.session_state.Compimg1_input = leftImage.file_uploader('**:grey[Upload the first image in PNG format]**', type= ['jpg', 'jpeg', 'png'])         
         if st.session_state.Compimg1_input is not None:
             img1Name = st.session_state.Compimg1_input.name
-            img1Type = st.session_state.Compimg1_input.type
+            img1Type = img1Name.split('.')[-1].lower()
+            leftImage.write(img1Type)
             image1 = Image.open(st.session_state.Compimg1_input)
             buffer = io.BytesIO()
-            image1.save(buffer, format= img1Type)
+            # compressing images if they are jpeg as the large sizes are not acceptable
+            if img1Type in ['jpg', 'jpeg']:
+                   image1 = image1.convert("RGB")  # Ensure JPEG is in RGB mode
+                   image1.save(buffer, format=img1Type, quality=70, optimize=True)  # Lower quality = smaller file
+            else:
+                image1.save(buffer, format=img1Type.upper())
             buffer.seek(0)
             with open(f"/tmp/{img1Name}", "wb") as f:
-                f.write(buffer.read())         
+                f.write(buffer.read())     
    
         # upload a file in jpg, jpeg or png mode 
         st.session_state.CompImg2_input = rightImage.file_uploader('**:grey[Upload the second image in PNG format]**',type= ['jpg', 'jpeg', 'png']) 
         # if file is uploaded then open the image 
         if st.session_state.CompImg2_input is not None:
             img2Name = st.session_state.CompImg2_input.name
-            img2Type = st.session_state.CompImg2_input.type
+            img2Type = img2Name.split('.')[-1].lower()
             image2 = Image.open(st.session_state.CompImg2_input)
             buffer = io.BytesIO()
-            image2.save(buffer, format= img2Type)
+            # compressing images if they are jpeg as the large sizes are not acceptable
+            if img2Type in ['jpg', 'jpeg']:
+                   image2 = image2.convert("RGB")  # Ensure JPEG is in RGB mode
+                   image2.save(buffer, format=img2Type, quality=70, optimize=True)  # Lower quality = smaller file
+            else:
+                image2.save(buffer, format=img2Type.upper())
             buffer.seek(0)
             with open(f"/tmp/{img2Name}", "wb") as f:
                 f.write(buffer.read())
