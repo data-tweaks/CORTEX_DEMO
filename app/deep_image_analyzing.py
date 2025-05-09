@@ -298,7 +298,7 @@ def main():
             buffer = io.BytesIO()
             # compressing images if they are jpeg as the large sizes are not acceptable
             if imgType in ['jpg', 'jpeg']:
-                   image = image2.convert("RGB")  # Ensure JPEG is in RGB mode
+                   image = image.convert("RGB")  # Ensure JPEG is in RGB mode
                    image.save(buffer, format='JPEG', quality=70, optimize=True)  # Lower quality = smaller file
             else:
                 image.save(buffer, format=imgType.upper())
