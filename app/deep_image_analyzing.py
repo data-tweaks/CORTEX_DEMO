@@ -287,15 +287,22 @@ def main():
         # remove the existing images from the stage 
         purgeAnalyzeStage(st.session_state.demo_session)
         image = ""
-
-        # upload images 
+ 
+        # upload images in jpeg, png and jpg types 
         st.session_state.anlyzImg1_input = procContainer.file_uploader('**:grey[Upload image in PNG format]**', type= ['jpg', 'jpeg', 'png']) 
+        # if file is uploaded then open the image 
         if st.session_state.anlyzImg1_input is not None:
             imgName = st.session_state.anlyzImg1_input.name
+            imgType = imgName.split('.')[-1].lower()
             image = Image.open(st.session_state.anlyzImg1_input)
             buffer = io.BytesIO()
-            image.save(buffer, format='PNG')
-            buffer.seek(0)         
+            # compressing images if they are jpeg as the large sizes are not acceptable
+            if imgType in ['jpg', 'jpeg']:
+                   image = image2.convert("RGB")  # Ensure JPEG is in RGB mode
+                   image.save(buffer, format=imgType, quality=70, optimize=True)  # Lower quality = smaller file
+            else:
+                image.save(buffer, format=imgType.upper())
+            buffer.seek(0)
             with open(f"/tmp/{imgName}", "wb") as f:
                 f.write(buffer.read())
 
